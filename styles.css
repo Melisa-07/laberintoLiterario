@@ -86,3 +86,24 @@ footer {
     margin-top: 10px;
   }
   
+  #chatBox div {
+    padding: 5px;
+    margin: 5px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #chatBox {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  }
+  
+  #mensajeInput {
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  
+#listaClasificacion {
+    list-style: none;
+}
