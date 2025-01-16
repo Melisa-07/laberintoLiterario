@@ -26,7 +26,6 @@
     <div class="container mt-5">
       <h1 class="text-center">Laberinto Literario</h1>
 
-      <!-- Formulario de autenticación -->
       <form id="formAuth" class="mb-4">
         <div class="mb-3">
           <input
@@ -61,7 +60,6 @@
       </form>
     </div>
 
-    <!-- Período de Competencia -->
     <section id="periodoCompetencia" class="container">
       <h2>Período de Competencia</h2>
       <form id="formPeriodo">
@@ -84,7 +82,6 @@
       <p id="periodoActual" class="text-center mt-3"></p>
     </section>
 
-    <!-- Área Principal -->
     <section id="principal" class="container" style="display: none">
       <h2>Agregar un Libro</h2>
       <form id="formLibro" onsubmit="agregarLibro(event)">
@@ -128,23 +125,19 @@
       <ul id="listaLibros" class="list-group"></ul>
     </section>
 
-    <!-- Estadísticas del Usuario -->
     <section id="estadisticasUsuario" class="container mt-5">
       <h2>Mis Estadísticas</h2>
       <p id="puntosTotales" class="fs-5 text-center">Total de puntos: 0</p>
     </section>
 
-    <!-- Clasificación General -->
     <section id="clasificacionGeneral" class="container mt-5">
       <h2>Clasificación General</h2>
       <ul id="listaClasificacion" class="list-group"></ul>
     </section>
 
-    <!-- Sección de Chat -->
     <section id="chat" class="container mt-5" style="display: none">
       <h2>Chatea con otros lectores</h2>
 
-      <!-- Ventana de mensajes -->
       <div
         id="chatBox"
         style="
@@ -157,7 +150,6 @@
       >
       </div>
 
-      <!-- Formulario de mensaje -->
       <form id="formChat">
         <div class="mb-3">
           <input
@@ -185,7 +177,6 @@
       </p>
     </footer>
 
-    <!-- JS -->
     <script type="module" src="app.js"></script>
   </body>
 </html>

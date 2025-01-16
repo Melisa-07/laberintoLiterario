@@ -29,7 +29,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging.js";
 
 
-// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCD1wuSv95m9flkBh3P5yDkvVrxmC8xKaQ",
     authDomain: "competencia-de-lectura.firebaseapp.com",
@@ -45,7 +44,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const messaging = getMessaging(app);
 
-// Functions to show/hide sections
 function mostrarSeccionPrincipal() {
     document.getElementById("formAuth").style.display = "none";
     document.getElementById("principal").style.display = "block";
@@ -59,15 +57,13 @@ async function enviarMensaje(event) {
 
     if (user && mensaje) {
         try {
-            // Obtener el nick del usuario desde Firestore
             const userRef = doc(db, "usuarios", user.uid);
             const userDoc = await getDoc(userRef);
 
             if (userDoc.exists()) {
                 const userData = userDoc.data();
-                const nick = userData.nombre || "Usuario Anónimo";  // Usamos el campo 'nombre' como nick
+                const nick = userData.nombre || "Usuario Anónimo";  
 
-                // Enviar el mensaje junto con el nick del usuario y la marca de tiempo
                 await addDoc(collection(db, "mensajes"), {
                     userId: user.uid,
                     nick: nick,
@@ -75,7 +71,6 @@ async function enviarMensaje(event) {
                     timestamp: new Date(),
                 });
 
-                // Limpiar el campo de mensaje
                 document.getElementById("mensajeInput").value = "";
             } else {
                 console.log("No se encontró el usuario en la base de datos.");
@@ -88,43 +83,36 @@ async function enviarMensaje(event) {
     }
 }
 
-// Function to show messages in real time
 function mostrarMensajes() {
     const chatBox = document.getElementById("chatBox");
 
     const q = query(collection(db, "mensajes"), orderBy("timestamp"));
 
-    // Listener en tiempo real para los mensajes
     onSnapshot(q, (querySnapshot) => {
-        // Limpiar el contenido solo si deseas hacerlo al inicio
-        // chatBox.innerHTML = "";  // Remover esta línea si no deseas limpiar el chat
+        
 
         querySnapshot.forEach((doc) => {
             const mensajeData = doc.data();
             const mensajeElement = document.createElement("div");
 
-            // Obtener nick y mensaje
             const nick = mensajeData.nick;
             const mensaje = mensajeData.mensaje;
 
-            // Formatear la fecha (timestamp)
             const timestamp = mensajeData.timestamp.toDate();
-            const fecha = timestamp.toLocaleDateString();  // Día/Mes/Año
-            const hora = timestamp.toLocaleTimeString();  // Hora:Minutos:Segundos
+            const fecha = timestamp.toLocaleDateString();  
+            const hora = timestamp.toLocaleTimeString();  
 
-            // Crear el contenido del mensaje con el nick y la fecha
             mensajeElement.innerHTML = `
                 <strong>${nick}</strong>: ${mensaje} <br>
                 <small>${fecha} ${hora}</small>
             `;
 
             chatBox.appendChild(mensajeElement);
-            chatBox.scrollTop = chatBox.scrollHeight; // Asegura que el chat se desplace hacia abajo al recibir nuevos mensajes
+            chatBox.scrollTop = chatBox.scrollHeight; 
         });
     });
 }
 
-// Function to show books of current user
 async function mostrarLibros() {
     const user = auth.currentUser;
     const listaLibros = document.getElementById("listaLibros");
@@ -166,7 +154,6 @@ async function mostrarLibros() {
     }
 }
 
-// Function to add a book
 async function agregarLibro(event) {
     event.preventDefault();
 
@@ -217,7 +204,6 @@ async function agregarLibro(event) {
     }
 }
 
-// Function to remove a book
 async function eliminarLibro(libroId) {
     const confirmacion = confirm("¿Estás seguro de eliminar este libro?");
     if (confirmacion) {
@@ -264,7 +250,6 @@ async function eliminarLibro(libroId) {
     }
 }
 
-// Function to calculate points
 function calcularPuntos(paginas) {
     if (paginas <= 100) return 1;
     if (paginas <= 200) return 2;
@@ -272,7 +257,6 @@ function calcularPuntos(paginas) {
     return 5;
 }
 
-// Function to show user statistics
 async function mostrarEstadisticasUsuario() {
     const user = auth.currentUser;
     const puntosTotales = document.getElementById("puntosTotales");
@@ -294,7 +278,6 @@ async function mostrarEstadisticasUsuario() {
     }
 }
 
-// Function to show the general ranking
 async function mostrarClasificacionGeneral() {
     const listaClasificacion = document.getElementById("listaClasificacion");
     listaClasificacion.innerHTML = "";
@@ -336,7 +319,6 @@ async function mostrarClasificacionGeneral() {
     }
 }
 
-// Function to show current competition period
 function mostrarPeriodoActual() {
     const periodoActual = document.getElementById("periodoActual");
     const settingsRef = doc(db, 'settings', 'competitionPeriod');
@@ -353,7 +335,6 @@ function mostrarPeriodoActual() {
     });
 }
 
-// Function to set competition period
 async function establecerPeriodo(event) {
     event.preventDefault();
 
@@ -374,7 +355,6 @@ async function establecerPeriodo(event) {
     mostrarPeriodoActual();
 }
 
-// Event listeners
 onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log(`Usuario autenticado: ${user.email}`);
@@ -394,7 +374,6 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Form listeners
 document.getElementById("formAuth").addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
