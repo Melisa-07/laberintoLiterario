@@ -1,109 +1,411 @@
+/* ── Variables ── */
+:root {
+  --cream: #fdf6ee;
+  --brown-dark: #7c5c3e;
+  --brown-mid: #a07850;
+  --brown-light: #c9a87c;
+  --green: #5a7a5a;
+  --green-light: #75ba75;
+  --purple: #8e6b8e;
+  --purple-light: #be95be;
+  --text: #2e2e2e;
+  --text-muted: #6b6b6b;
+  --border: #ddd0c0;
+  --white: #ffffff;
+  --shadow: 0 2px 12px rgba(124,92,62,0.10);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #fff;
-    color: #000;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--cream);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
+/* ── Typography ── */
 h1 {
-    font-family: 'Allura', cursive !important;
-    font-size: 58px !important;
-    color: #4A4A4A;
+  font-family: 'Allura', cursive;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  color: var(--brown-dark);
+  margin: 0;
+  line-height: 1.1;
 }
 
-
-h2,
-h3,
-p,
-button,
-input {
-    font-family: 'Montserrat', sans-serif;
+h2 {
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  color: var(--brown-dark);
+  font-weight: 700;
+  margin: 0 0 1rem;
 }
 
-h1,
-h2,
 h3 {
-    margin: 1rem 0;
+  font-size: 1rem;
+  color: var(--brown-mid);
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem;
 }
 
-button {
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    margin: 0.5rem;
+/* ── Header ── */
+.app-header {
+  background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-mid) 100%);
+  color: var(--white);
+  text-align: center;
+  padding: 2rem 1rem 1.5rem;
+  box-shadow: 0 3px 12px rgba(124,92,62,0.25);
 }
 
-button:hover {
-    background: #444;
+.app-header h1 { color: var(--white); }
+
+.app-header .tagline {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0;
+  letter-spacing: 0.05em;
 }
 
-input {
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    width: 80%;
+/* ── Layout ── */
+.app-main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-
-#principal {
-    padding: 1rem;
-    text-align: center;
+/* ── Cards ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1.25rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--brown-light);
+  outline-offset: 2px;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--brown-dark);
+  color: var(--white);
+  width: 100%;
+}
+.btn-primary:hover { background: var(--brown-mid); }
+
+.btn-green {
+  background: var(--green);
+  color: var(--white);
+  width: 100%;
+}
+.btn-green:hover { background: #4a6a4a; }
+
+.btn-purple {
+  background: var(--purple);
+  color: var(--white);
+  width: 100%;
+}
+.btn-purple:hover { background: #7a5a7a; }
+
+.btn-danger {
+  background: transparent;
+  color: #c0392b;
+  border: 1.5px solid #c0392b;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  min-height: 36px;
+  border-radius: 6px;
+}
+.btn-danger:hover { background: #fdecea; }
+
+.btn-logout {
+  background: transparent;
+  color: rgba(255,255,255,0.85);
+  border: 1.5px solid rgba(255,255,255,0.5);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  min-height: 36px;
+  margin-top: 0.75rem;
+}
+.btn-logout:hover { background: rgba(255,255,255,0.12); }
+
+/* ── Form controls ── */
+.form-group {
+  margin-bottom: 0.9rem;
+}
+
+label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: 44px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--brown-mid);
+  box-shadow: 0 0 0 3px rgba(160,120,80,0.15);
+}
+
+.form-control::placeholder { color: #b0a090; }
+
+/* ── Auth section ── */
+.auth-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: -0.5rem 0 1.25rem;
+}
+
+/* ── Período badge ── */
+#periodoActual {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  color: var(--brown-dark);
+  text-align: center;
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+/* ── Lista de libros ── */
 #listaLibros {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 #listaLibros li {
-    background: #f5f5f5;
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    border-radius: 5px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
 }
 
-footer {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-top: 2px solid #ddd;
-  }
-  
-  footer p {
-    font-family: 'Montserrat', sans-serif;
-    color: #333;
-  }
-  
-  footer p strong {
-    font-size: 1.2em;
-    color: #5a5a5a;
-  }
-  
-  footer p:last-child {
-    font-size: 1em;
-    margin-top: 10px;
-  }
-  
-  #chatBox div {
-    padding: 5px;
-    margin: 5px 0;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  #chatBox {
-    background-color: #f9f9f9;
-    border-radius: 5px;
-  }
-  
-  #mensajeInput {
-    border-radius: 5px;
-    padding: 10px;
-    border: 1px solid #ccc;
-  }
+.libro-info { flex: 1; line-height: 1.4; }
+.libro-titulo { font-weight: 700; color: var(--text); }
+.libro-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.1rem; }
+.libro-puntos {
+  background: var(--brown-dark);
+  color: var(--white);
+  border-radius: 20px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
 
-  
+/* ── Estadísticas ── */
+.stats-box {
+  background: linear-gradient(135deg, var(--brown-dark), var(--brown-mid));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--white);
+}
+
+.stats-box .stats-number {
+  font-size: clamp(2.5rem, 10vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.stats-box .stats-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+
+/* ── Ranking ── */
 #listaClasificacion {
-    list-style: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
+
+#listaClasificacion li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.rank-pos {
+  font-weight: 800;
+  font-size: 1rem;
+  min-width: 1.75rem;
+  text-align: center;
+  color: var(--brown-mid);
+}
+
+.rank-pos.gold   { color: #c9a327; }
+.rank-pos.silver { color: #8e9bac; }
+.rank-pos.bronze { color: #a0694e; }
+
+.rank-name { flex: 1; font-weight: 600; }
+
+.rank-pts {
+  font-weight: 700;
+  color: var(--brown-dark);
+  font-size: 0.85rem;
+}
+
+/* ── Chat ── */
+#chatBox {
+  height: 220px;
+  overflow-y: auto;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 0.9rem;
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  scroll-behavior: smooth;
+}
+
+#chatBox div {
+  padding: 0.5rem 0.75rem;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+#chatBox div strong { color: var(--brown-dark); }
+#chatBox div small  { color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 0.15rem; }
+
+/* ── Footer ── */
+footer {
+  background: var(--brown-dark);
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.8rem;
+  margin-top: 2rem;
+}
+
+footer strong { color: var(--white); }
+
+/* ── Puntos scoring info ── */
+.scoring-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.scoring-item {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.scoring-item .pts {
+  font-weight: 800;
+  color: var(--brown-dark);
+  font-size: 1rem;
+  display: block;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .app-main { padding: 1rem 0.75rem 5rem; gap: 1rem; }
+  .card { padding: 1.1rem; }
+  .scoring-info { grid-template-columns: repeat(2, 1fr); }
+  #listaLibros li { flex-direction: column; align-items: flex-start; }
+}
+
+/* ── Utilidades ── */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+/* ── Skip link accesibilidad ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--brown-dark);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  z-index: 999;
+  font-weight: 700;
+}
+.skip-link:focus { top: 0; }

@@ -45,8 +45,10 @@ const db = getFirestore(app);
 const messaging = getMessaging(app);
 
 function mostrarSeccionPrincipal() {
-    document.getElementById("formAuth").style.display = "none";
+    document.getElementById("seccionAuth").style.display = "none";
     document.getElementById("principal").style.display = "block";
+    document.getElementById("estadisticasUsuario").style.display = "block";
+    document.getElementById("headerUser").style.display = "block";
 }
 
 async function enviarMensaje(event) {
@@ -135,11 +137,18 @@ async function mostrarLibros() {
                         nombre = "Desconocido", autor = "Desconocido", paginas = 0, puntos = 0
                     } = libroData;
                     const nuevoLibro = document.createElement("li");
-                    nuevoLibro.textContent = `${nombre} - ${autor} (${paginas} páginas) = ${puntos} puntos`;
+                    nuevoLibro.innerHTML = `
+                        <div class="libro-info">
+                            <div class="libro-titulo">${nombre}</div>
+                            <div class="libro-meta">${autor} · ${paginas} páginas</div>
+                        </div>
+                        <span class="libro-puntos">${puntos} pts</span>
+                    `;
 
                     const btnEliminar = document.createElement("button");
                     btnEliminar.textContent = "Eliminar";
-                    btnEliminar.classList.add("btn", "btn-danger", "ms-3");
+                    btnEliminar.classList.add("btn", "btn-danger");
+                    btnEliminar.setAttribute("aria-label", `Eliminar ${nombre}`);
                     btnEliminar.onclick = () => eliminarLibro(doc.id);
 
                     nuevoLibro.appendChild(btnEliminar);
@@ -269,6 +278,8 @@ async function mostrarEstadisticasUsuario() {
             if (userDoc.exists()) {
                 const totalPuntos = userDoc.data().puntosTotales || 0;
                 puntosTotales.textContent = `Total de puntos: ${totalPuntos}`;
+                const numeroPuntos = document.getElementById("numeroPuntos");
+                if (numeroPuntos) numeroPuntos.textContent = totalPuntos;
             } else {
                 puntosTotales.textContent = "No se pudo obtener los puntos del usuario.";
             }
@@ -306,9 +317,16 @@ async function mostrarClasificacionGeneral() {
             return;
         }
 
+        const medals = ['gold', 'silver', 'bronze'];
         clasificacion.forEach((usuario, index) => {
             const li = document.createElement("li");
-            li.textContent = `${index + 1}. ${usuario.nombre} - ${usuario.puntos} puntos`;
+            const posClass = medals[index] ? `rank-pos ${medals[index]}` : 'rank-pos';
+            const emoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}`;
+            li.innerHTML = `
+                <span class="${posClass}" aria-hidden="true">${emoji}</span>
+                <span class="rank-name">${usuario.nombre}</span>
+                <span class="rank-pts">${usuario.puntos} pts</span>
+            `;
             listaClasificacion.appendChild(li);
         });
     } catch (error) {
@@ -357,21 +375,27 @@ async function establecerPeriodo(event) {
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        console.log(`Usuario autenticado: ${user.email}`);
         mostrarSeccionPrincipal();
         mostrarLibros();
         mostrarEstadisticasUsuario();
         mostrarPeriodoActual();
-        mostrarClasificacionGeneral();        
-        document.getElementById('chat').style.display = 'block'; 
-        mostrarMensajes(); 
-
+        mostrarClasificacionGeneral();
+        document.getElementById('chat').style.display = 'block';
+        mostrarMensajes();
     } else {
-        console.log("No hay usuario autenticado.");
-        document.getElementById('chat').style.display = 'none'; 
-        document.getElementById("formAuth").style.display = "block";
+        document.getElementById('chat').style.display = 'none';
+        document.getElementById("seccionAuth").style.display = "block";
         document.getElementById("principal").style.display = "none";
+        document.getElementById("estadisticasUsuario").style.display = "none";
+        document.getElementById("headerUser").style.display = "none";
     }
+});
+
+// Logout
+document.getElementById("btnLogout").addEventListener("click", () => {
+    import("https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js").then(({ signOut }) => {
+        signOut(auth);
+    });
 });
 
 document.getElementById("formAuth").addEventListener("submit", async (e) => {
