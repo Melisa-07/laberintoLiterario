@@ -3,151 +3,250 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Competencia de lectura entre amigos — registrá tus libros, sumá puntos y competí." />
-    <meta name="theme-color" content="#7c5c3e" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Laberinto" />
+    <meta name="description" content="Laberinto Literario: anotá los libros que leés, sumá puntos y competí con tus amigos y amigas." />
+    <meta name="theme-color" content="#FBF8F2" />
 
-    <link rel="manifest" href="manifest.json" />
+    <title>Laberinto Literario</title>
+
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon-192.png" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
-    <title>Laberinto Literario</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
 
-    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-
-    <!-- Header -->
-    <header class="app-header" role="banner">
-      <h1>Laberinto Literario</h1>
-      <p class="tagline">Competencia de lectura entre amigos</p>
-      <div id="headerUser" style="display:none;">
-        <button class="btn btn-logout" id="btnLogout" aria-label="Cerrar sesión">Cerrar sesión</button>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <div class="brand">
+          <svg class="brand__mark" viewBox="0 0 48 48" role="presentation" aria-hidden="true" focusable="false">
+            <path d="M6 6h36v36H6z" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 12h10v10H12zM26 12h10v6h-6v4M16 22v10h-4M26 26h10v10H26M16 32h6v4h-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+          </svg>
+          <p class="brand__title">Laberinto Literario</p>
+        </div>
+        <p class="brand__tagline">Leé. Anotá. Competí.</p>
       </div>
     </header>
 
-    <main id="main-content" class="app-main">
+    <main id="contenido-principal">
 
-      <!-- Auth -->
-      <section class="card" id="seccionAuth" aria-label="Registro e inicio de sesión">
-        <h2>Ingresá a tu cuenta</h2>
-        <p class="auth-subtitle">Si no tenés cuenta, se crea automáticamente.</p>
+      <!-- ESTADO: CARGANDO -->
+      <section id="cargaInicial" class="state-screen" aria-live="polite">
+        <div class="spinner" role="status">
+          <span class="sr-only">Cargando…</span>
+        </div>
+        <p>Abriendo el laberinto…</p>
+      </section>
+
+      <!-- AUTENTICACIÓN -->
+      <section id="seccionAuth" class="card card--auth hidden" aria-labelledby="authTitulo">
+        <h1 id="authTitulo" class="card__title">Entrá al laberinto</h1>
+        <p class="card__lead">Iniciá sesión o creá una cuenta para empezar a sumar libros.</p>
+
+        <div id="authError" class="alert alert--error hidden" role="alert"></div>
+
         <form id="formAuth" novalidate>
-          <div class="form-group">
+          <div class="field">
             <label for="email">Correo electrónico</label>
-            <input type="email" class="form-control" id="email" placeholder="tu@correo.com" required autocomplete="email" />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              required
+            />
+            <p class="field__hint" id="emailHint"></p>
           </div>
-          <div class="form-group">
+
+          <div class="field">
             <label for="password">Contraseña</label>
-            <input type="password" class="form-control" id="password" placeholder="Mínimo 6 caracteres" required autocomplete="current-password" />
+            <div class="field__password">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="current-password"
+                minlength="6"
+                required
+                aria-describedby="passwordHint"
+              />
+              <button type="button" class="field__toggle" id="togglePassword" aria-pressed="false">
+                <span class="sr-only">Mostrar contraseña</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 11a4 4 0 110-8 4 4 0 010 8z"/></svg>
+              </button>
+            </div>
+            <p class="field__hint" id="passwordHint">Mínimo 6 caracteres.</p>
           </div>
-          <div class="form-group">
-            <label for="nick">Nombre para el ranking</label>
-            <input type="text" class="form-control" id="nick" placeholder="Tu apodo" required autocomplete="nickname" />
+
+          <div class="field field--nick hidden" id="campoNick">
+            <label for="nick">¿Cómo querés que te vean en la clasificación?</label>
+            <input
+              type="text"
+              id="nick"
+              name="nick"
+              autocomplete="nickname"
+              maxlength="30"
+            />
           </div>
-          <button class="btn btn-primary" type="submit">Registrarse / Iniciar sesión</button>
+
+          <div class="field--actions">
+            <button class="btn btn--primary" type="submit" id="btnAuthSubmit">
+              <span class="btn__label">Iniciar sesión</span>
+              <span class="btn__spinner hidden" aria-hidden="true"></span>
+            </button>
+            <button class="btn btn--link" type="button" id="btnAuthSwitch">
+              ¿No tenés cuenta? Registrate
+            </button>
+          </div>
         </form>
       </section>
 
-      <!-- Período de competencia -->
-      <section class="card" id="periodoCompetencia" aria-label="Período de competencia">
-        <h2>📅 Período de competencia</h2>
-        <form id="formPeriodo">
-          <div class="form-group">
-            <label for="fechaInicio">Fecha de inicio</label>
-            <input type="date" id="fechaInicio" class="form-control" required />
-          </div>
-          <div class="form-group">
-            <label for="fechaFin">Fecha de fin</label>
-            <input type="date" id="fechaFin" class="form-control" required />
-          </div>
-          <button class="btn btn-green" type="submit">Establecer período</button>
-        </form>
-        <p id="periodoActual" role="status" aria-live="polite"></p>
-      </section>
+      <!-- APP (autenticado) -->
+      <div id="appAutenticada" class="hidden">
 
-      <!-- Mis puntos -->
-      <section id="estadisticasUsuario" class="stats-box" style="display:none;" aria-label="Mis puntos">
-        <div class="stats-number" id="numeroPuntos">0</div>
-        <div class="stats-label">puntos acumulados</div>
-      </section>
+        <nav class="tabs" aria-label="Secciones de la aplicación">
+          <button class="tabs__btn is-active" data-tab="tabLibros" id="tabBtnLibros" role="tab" aria-selected="true" aria-controls="tabLibros">
+            Mis libros
+          </button>
+          <button class="tabs__btn" data-tab="tabClasificacion" id="tabBtnClasificacion" role="tab" aria-selected="false" aria-controls="tabClasificacion">
+            Clasificación
+          </button>
+          <button class="tabs__btn" data-tab="tabChat" id="tabBtnChat" role="tab" aria-selected="false" aria-controls="tabChat">
+            Chat
+          </button>
+        </nav>
 
-      <!-- Agregar libro -->
-      <section class="card" id="principal" style="display:none;" aria-label="Agregar libro">
-        <h2>📚 Agregar un libro</h2>
-        <form id="formLibro">
-          <div class="form-group">
-            <label for="nombreLibro">Título</label>
-            <input type="text" id="nombreLibro" class="form-control" placeholder="Nombre del libro" required />
+        <!-- TAB: MIS LIBROS -->
+        <section id="tabLibros" class="tab-panel" role="tabpanel" aria-labelledby="tabBtnLibros">
+
+          <div class="card card--periodo" id="periodoCompetencia">
+            <div class="periodo__info">
+              <p class="periodo__etiqueta">Período de competencia</p>
+              <p id="periodoActual" class="periodo__fechas">Sin definir todavía.</p>
+            </div>
+            <button class="btn btn--ghost btn--small hidden" id="btnEditarPeriodo" type="button">
+              Editar
+            </button>
           </div>
-          <div class="form-group">
-            <label for="autorLibro">Autor/a</label>
-            <input type="text" id="autorLibro" class="form-control" placeholder="Nombre del autor o autora" required />
+
+          <form id="formPeriodo" class="card card--form hidden">
+            <h2 class="card__title card__title--small">Definir período</h2>
+            <div class="field-row">
+              <div class="field">
+                <label for="fechaInicio">Inicio</label>
+                <input type="date" id="fechaInicio" required />
+              </div>
+              <div class="field">
+                <label for="fechaFin">Fin</label>
+                <input type="date" id="fechaFin" required />
+              </div>
+            </div>
+            <div id="periodoError" class="alert alert--error hidden" role="alert"></div>
+            <div class="field--actions">
+              <button class="btn btn--primary" type="submit">Guardar período</button>
+              <button class="btn btn--ghost" type="button" id="btnCancelarPeriodo">Cancelar</button>
+            </div>
+          </form>
+
+          <div class="card card--stats">
+            <p class="stats__etiqueta">Tus puntos</p>
+            <p id="puntosTotales" class="stats__numero">0</p>
+            <p class="stats__detalle" id="puntosDetalle">Agregá tu primer libro para empezar a sumar.</p>
           </div>
-          <div class="form-group">
-            <label for="paginasLibro">Cantidad de páginas</label>
-            <input type="number" id="paginasLibro" class="form-control" placeholder="Ej: 320" required min="1" />
+
+          <div class="card card--form">
+            <h2 class="card__title card__title--small">Agregar un libro</h2>
+            <form id="formLibro" novalidate>
+              <div class="field">
+                <label for="nombreLibro">Título</label>
+                <input type="text" id="nombreLibro" maxlength="120" required />
+              </div>
+              <div class="field">
+                <label for="autorLibro">Autor o autora</label>
+                <input type="text" id="autorLibro" maxlength="80" required />
+              </div>
+              <div class="field">
+                <label for="paginasLibro">Cantidad de páginas</label>
+                <input type="number" id="paginasLibro" min="1" max="20000" inputmode="numeric" required />
+                <p class="field__hint">≤100 → 1 pto · ≤200 → 2 ptos · ≤300 → 3,5 ptos · &gt;300 → 5 ptos</p>
+              </div>
+              <div id="libroError" class="alert alert--error hidden" role="alert"></div>
+              <button class="btn btn--primary btn--full" type="submit" id="btnAgregarLibro">
+                <span class="btn__label">Agregar libro</span>
+                <span class="btn__spinner hidden" aria-hidden="true"></span>
+              </button>
+            </form>
           </div>
-          <button class="btn btn-purple" type="submit">Agregar libro</button>
-        </form>
 
-        <!-- Tabla de puntos -->
-        <details class="mt-2" style="cursor:pointer;">
-          <summary style="font-size:0.82rem; color:var(--text-muted); font-weight:600; padding:0.4rem 0;">
-            ¿Cómo se calculan los puntos?
-          </summary>
-          <div class="scoring-info mt-1">
-            <div class="scoring-item"><span class="pts">1</span>hasta 100 pág.</div>
-            <div class="scoring-item"><span class="pts">2</span>hasta 200 pág.</div>
-            <div class="scoring-item"><span class="pts">3.5</span>hasta 300 pág.</div>
-            <div class="scoring-item"><span class="pts">5</span>más de 300 pág.</div>
+          <div class="card card--list">
+            <h2 class="card__title card__title--small">Tu biblioteca</h2>
+            <ul id="listaLibros" class="book-list" aria-live="polite"></ul>
+            <p id="librosVacio" class="empty-state hidden">
+              Todavía no agregaste ningún libro. Cuando termines uno, anotalo acá arriba.
+            </p>
           </div>
-        </details>
+        </section>
 
-        <h3>Mis libros</h3>
-        <ul id="listaLibros" aria-label="Lista de libros agregados"></ul>
-      </section>
-
-      <!-- Ranking -->
-      <section class="card" id="clasificacionGeneral" aria-label="Clasificación general">
-        <h2>🏆 Clasificación</h2>
-        <ul id="listaClasificacion" aria-label="Ranking de participantes"></ul>
-      </section>
-
-      <!-- Chat -->
-      <section class="card" id="chat" style="display:none;" aria-label="Chat de lectores">
-        <h2>💬 Chat de lectores</h2>
-        <div id="chatBox" role="log" aria-live="polite" aria-label="Mensajes del chat"></div>
-        <form id="formChat">
-          <div class="form-group">
-            <label for="mensajeInput">Tu mensaje</label>
-            <input type="text" id="mensajeInput" class="form-control" placeholder="Escribí algo..." required />
+        <!-- TAB: CLASIFICACIÓN -->
+        <section id="tabClasificacion" class="tab-panel hidden" role="tabpanel" aria-labelledby="tabBtnClasificacion">
+          <div class="card card--list">
+            <h2 class="card__title card__title--small">Clasificación general</h2>
+            <ol id="listaClasificacion" class="rank-list" aria-live="polite"></ol>
+            <p id="clasificacionVacio" class="empty-state hidden">
+              Todavía no hay lectores en la clasificación.
+            </p>
           </div>
-          <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>
-      </section>
+        </section>
 
+        <!-- TAB: CHAT -->
+        <section id="tabChat" class="tab-panel hidden" role="tabpanel" aria-labelledby="tabBtnChat">
+          <div class="card card--chat">
+            <h2 class="card__title card__title--small">Chat de lectores</h2>
+            <div id="chatBox" class="chat-box" role="log" aria-live="polite" aria-label="Mensajes del chat"></div>
+            <form id="formChat" class="chat-form">
+              <label for="mensajeInput" class="sr-only">Escribí un mensaje</label>
+              <input
+                type="text"
+                id="mensajeInput"
+                placeholder="Escribí un mensaje…"
+                maxlength="300"
+                required
+              />
+              <button type="submit" class="btn btn--primary">
+                <span class="sr-only">Enviar</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 20l18-8L3 4v6l13 2-13 2z"/></svg>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <button class="btn btn--ghost btn--logout" id="btnLogout" type="button">
+          Cerrar sesión
+        </button>
+      </div>
     </main>
 
-    <footer role="contentinfo">
-      <p>Ideada y desarrollada por <strong>Melisa Alfonso</strong></p>
-      <p>Promovemos la lectura mediante la competencia amistosa 📖</p>
+    <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+
+    <footer class="site-footer">
+      <p class="site-footer__credito">
+        Aplicación ideada y desarrollada por <strong>Melisa Alfonso</strong>
+      </p>
+      <p class="site-footer__texto">
+        Laberinto Literario promueve la lectura mediante la competencia entre amigos y amigas.
+        Registrá los libros que leés, sumá puntos y mirá cómo te ubicás en la clasificación.
+      </p>
     </footer>
 
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js');
-        });
-      }
-    </script>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="src/js/main.js"></script>
   </body>
 </html>
